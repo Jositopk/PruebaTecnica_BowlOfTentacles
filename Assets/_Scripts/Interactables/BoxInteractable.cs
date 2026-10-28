@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class BoxInteractable : AInteractable
 {
     [SerializeField] private BoxPuzzle boxPuzzle;
-    public override void Interact()
+    public override void Interact(PlayerInteractor interactor)
     {
         if (boxPuzzle.IsSolved){return;}
         UIManager.Instance.ShowBox(boxPuzzle);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +12,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private BoxUI boxUI;
     [SerializeField] private TMPro.TMP_Text interactionText;
     [SerializeField] private TMPro.TMP_Text informationText;
+    [SerializeField] private GameObject endingPanel;
+
     private bool noteIsOpen = false;
     private bool boxIsOpen = false;
     public bool IsUIOpen => noteIsOpen || boxIsOpen;
@@ -22,6 +25,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float fadeDuration = 0.5f;
 
     private Coroutine informationCoroutine;
+    private bool isBlockingMessage = false;
+    private Action currentNoteClosedCallback;
 
     //Patron Singelton para que solo exista una instancia de UIManager en la escena.
     private void Awake()
@@ -51,8 +56,11 @@ public class UIManager : MonoBehaviour
     //////////////////////////////////////
     #region NoteUI
 
-    public void ShowNote(NoteData note)
+    public void ShowNote(NoteData note, Action onClosed = null)
     {
+        //Guardamos el evento si lo tiene
+        currentNoteClosedCallback = onClosed;
+
         if (noteIsOpen || boxIsOpen) { return; }
         noteIsOpen = true;
         OpenUI();
@@ -62,6 +70,12 @@ public class UIManager : MonoBehaviour
     public void CloseNote()
     {
         if (!noteIsOpen) { return; }
+
+        //Ejecutar evento al cerrar
+        Action callback = currentNoteClosedCallback;
+        currentNoteClosedCallback = null;
+        callback?.Invoke();
+
         noteUI.CloseNote();
         CloseUI();
         noteIsOpen = false;
@@ -109,16 +123,38 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region InformationText
+    // Mensaje normal: duración automática, sin pausa.
     public void ShowInformation(string message)
     {
-        if (informationText == null || string.IsNullOrWhiteSpace(message))
+        if (informationText == null ||
+            string.IsNullOrWhiteSpace(message) ||
+            isBlockingMessage)
             return;
 
-        // Cancelar el mensaje anterior si existe.
         if (informationCoroutine != null)
             StopCoroutine(informationCoroutine);
 
-        informationCoroutine = StartCoroutine(ShowInformationCoroutine(message));
+        informationCoroutine = StartCoroutine(
+            ShowInformationCoroutine(message)
+        );
+    }
+
+    // Mensaje con duración fija y pausa.
+    public void ShowInformation(string message, float seconds)
+    {
+        if (informationText == null ||
+            string.IsNullOrWhiteSpace(message) ||
+            isBlockingMessage)
+            return;
+
+        if (informationCoroutine != null)
+            StopCoroutine(informationCoroutine);
+
+        isBlockingMessage = true;
+
+        informationCoroutine = StartCoroutine(
+            ShowInformationCoroutine(message, seconds)
+        );
     }
 
     private IEnumerator ShowInformationCoroutine(string message)
@@ -128,7 +164,7 @@ public class UIManager : MonoBehaviour
         informationText.gameObject.SetActive(true);
 
         // Calcular duracion segun longitud del mensaje.
-        float displayTime = Mathf.Clamp(message.Length / charactersPerSecond,minDisplayTime,maxDisplayTime);
+        float displayTime = Mathf.Clamp(message.Length / charactersPerSecond, minDisplayTime, maxDisplayTime);
 
         yield return new WaitForSecondsRealtime(displayTime);
 
@@ -143,8 +179,60 @@ public class UIManager : MonoBehaviour
         informationText.gameObject.SetActive(false);
         informationCoroutine = null;
     }
-    #endregion
 
+    private IEnumerator ShowInformationCoroutine(string message, float displayTime)
+    {
+        informationText.text = message;
+        informationText.alpha = 1f;
+        informationText.gameObject.SetActive(true);
+
+        GameManager gm = GameManager.Instance;
+        GameState previousState = gm.CurrentState;
+
+        // Pausar solo si estamos jugando.
+        // Durante la introduccion mantenemos STARTING.
+        if (previousState == GameState.ONGOING)
+            gm.SetState(GameState.PAUSED);
+
+        yield return new WaitForSecondsRealtime(displayTime);
+
+        // Recuperar el estado correspondiente.
+        if (previousState == GameState.STARTING &&
+            gm.CurrentState == GameState.STARTING)
+            gm.SetState(GameState.ONGOING);
+        else if (previousState == GameState.ONGOING &&
+                 gm.CurrentState == GameState.PAUSED)
+            gm.SetState(GameState.ONGOING);
+
+        // Recuperar el cursor al volver al juego.
+        if (gm.CurrentState == GameState.ONGOING && !IsUIOpen)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        // Fade-out
+        float elapsed = 0f;
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            informationText.alpha =
+                1f - Mathf.Clamp01(elapsed / fadeDuration);
+            yield return null;
+        }
+
+        informationText.gameObject.SetActive(false);
+        informationCoroutine = null;
+        isBlockingMessage = false;
+    }
+
+    #endregion
+    public void ShowEndingPanel()
+    {
+        endingPanel.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
     //////////////////////////////////////
     //metodos para abrir y cerrar la UI
     //////////////////////////////////////

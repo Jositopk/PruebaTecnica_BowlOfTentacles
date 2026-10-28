@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerInput), typeof(PlayerInventory))]
 public class PlayerInteractor : MonoBehaviour
 {
     [Header("Referencias")]
@@ -17,13 +17,17 @@ public class PlayerInteractor : MonoBehaviour
     // Referencias al sistema de entrada.
     private PlayerInput playerInput;
     private InputAction interactAction;
+    private InputAction dropAction;
 
     // Objeto al que estamos apuntando actualmente.
     private IInteractable currentInteractable;
+    public PlayerInventory Inventory { get; private set; }
+
 
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
+        Inventory = GetComponent<PlayerInventory>();
 
         // Si no se ha asignado una camara, la buscamos
         // entre los hijos del jugador.
@@ -31,15 +35,18 @@ public class PlayerInteractor : MonoBehaviour
             playerCamera = GetComponentInChildren<Camera>();
 
         // Obtenemos la accion Interact del Input System.
-        interactAction = playerInput.actions.FindAction(
-            "Interact", true
-        );
+        interactAction = playerInput.actions.FindAction("Interact", true);
+        dropAction = playerInput.actions.FindAction("Drop",true);
     }
 
     private void Update()
     {
         DetectInteractable();
         HandleInteraction();
+        if (dropAction.WasPressedThisFrame())
+        {
+            Inventory.DropItem();
+        }
     }
 
     private void DetectInteractable()
@@ -80,7 +87,7 @@ public class PlayerInteractor : MonoBehaviour
         if (currentInteractable != null &&
             interactAction.WasPressedThisFrame())
         {
-            currentInteractable.Interact();
+            currentInteractable.Interact(this);
         }
     }
     private void OnDisable()

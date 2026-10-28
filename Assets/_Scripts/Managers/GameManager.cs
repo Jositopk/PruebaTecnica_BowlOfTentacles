@@ -1,19 +1,21 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
     STARTING,
     ONGOING,
     PAUSED,
+    ENDING,
     FINISHED
 }
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    public bool exitUnlocked;
 
     [Header("Referencias Principales")]
     [SerializeField] private PuzzleManager puzzleManager;
@@ -22,12 +24,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerInteractor playerInteractor;
 
     private bool playerControlEnabled = true;
+    public bool allPuzzlesSolved;
 
     //Atributos de gestion de estados
     public GameState CurrentState { get; private set; }
         = GameState.STARTING;
 
     public event Action<GameState> OnStateChanged;
+    [SerializeField] private UnityEvent onGameInitialized;
 
     private void Awake()
     {
@@ -42,6 +46,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        onGameInitialized?.Invoke();
+        UIManager.Instance.ShowInformation("He venido a recoger la caja de mamá. Después entregaré las llaves", 2);
         UpdatePlayerControls();
     }
     private void OnEnable()
@@ -60,7 +66,8 @@ public class GameManager : MonoBehaviour
     }
     private void CheckEndConditions()
     {
-        exitUnlocked = puzzleManager.AllPuzzlesSolved;
+        allPuzzlesSolved = puzzleManager.AllPuzzlesSolved;
+
     }
     public void SetState(GameState newState)
     {
@@ -81,7 +88,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdatePlayerControls()
     {
-        bool canControl = CurrentState == GameState.ONGOING&& playerControlEnabled;
+        bool canControl = CurrentState == GameState.ONGOING && playerControlEnabled;
 
         playerController.enabled = canControl;
         playerInteractor.enabled = canControl;
@@ -90,6 +97,19 @@ public class GameManager : MonoBehaviour
     public bool CanExit()
     {
         return CurrentState == GameState.ONGOING
-            && exitUnlocked;
+            && allPuzzlesSolved;
+    }
+    public void RestartGame()
+    {
+        Time.timeScale = 1f;
+
+        SceneManager.LoadScene(
+            SceneManager.GetActiveScene().buildIndex
+        );
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

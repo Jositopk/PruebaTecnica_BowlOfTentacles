@@ -8,7 +8,7 @@ public abstract class AInteractable : MonoBehaviour, IInteractable
     public bool IsInteractable => isInteractable;
 
     // Cada objeto hijo DEBE implementar su propia interaccion.
-    public abstract void Interact();
+    public abstract void Interact(PlayerInteractor interactor);
 
     // Comportamiento comun que los hijos pueden sobrescribir.
     // De momento lo comprobamos mediante la consola.
