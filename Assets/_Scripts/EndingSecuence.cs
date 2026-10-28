@@ -13,8 +13,6 @@ public class EndingSequence : MonoBehaviour
 
     [Header("Referencias")]
     [SerializeField] private CanvasGroup blackFade;
-    [SerializeField] private GameObject endingPanel;
-
     [Header("Eventos")]
     [SerializeField] private UnityEvent onDoorClose;
 
@@ -24,9 +22,6 @@ public class EndingSequence : MonoBehaviour
     private void Start()
     {
         gameManager = GameManager.Instance;
-
-        if (endingPanel != null)
-            endingPanel.SetActive(false);
 
         if (blackFade != null)
         {
