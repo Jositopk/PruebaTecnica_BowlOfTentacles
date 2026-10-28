@@ -47,7 +47,7 @@ public class PlayerInteractor : MonoBehaviour
         IInteractable detectedInteractable = null;
 
         // Lanzamos un rayo desde la camara hacia delante.
-        if (Physics.Raycast(playerCamera.transform.position,playerCamera.transform.forward,out RaycastHit hit,interactionDistance,raycastLayers,QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionDistance, raycastLayers, QueryTriggerInteraction.Ignore))
         {
             // Comprobamos si el objeto impactado o alguno
             // de sus padres implementa IInteractable.
@@ -63,7 +63,7 @@ public class PlayerInteractor : MonoBehaviour
             if (currentInteractable != null)
             {
                 string prompt = currentInteractable.ShowInteractionPrompt();
-            
+
                 UIManager.Instance.ShowInteractionPrompt(prompt);
             }
             else
@@ -82,5 +82,12 @@ public class PlayerInteractor : MonoBehaviour
         {
             currentInteractable.Interact();
         }
+    }
+    private void OnDisable()
+    {
+        currentInteractable = null;
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.HideInteractionPrompt();
     }
 }

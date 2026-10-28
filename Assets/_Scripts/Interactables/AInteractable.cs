@@ -4,8 +4,6 @@ public abstract class AInteractable : MonoBehaviour, IInteractable
 {
     [Header("Interaccion")]
     [SerializeField]
-    private string interactionPrompt = "Pulsa E para interactuar";
-    [SerializeField]
     private bool isInteractable = true;
     public bool IsInteractable => isInteractable;
 
@@ -16,6 +14,6 @@ public abstract class AInteractable : MonoBehaviour, IInteractable
     // De momento lo comprobamos mediante la consola.
     public virtual string ShowInteractionPrompt()
     {
-        return interactionPrompt;
+        return "Pulsa E para interactuar";
     }
 }
