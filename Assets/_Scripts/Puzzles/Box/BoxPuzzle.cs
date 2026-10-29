@@ -2,28 +2,45 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 
-public class BoxPuzzle : MonoBehaviour,IPuzzle
+public class BoxPuzzle : MonoBehaviour, IPuzzle
 {
-    
+
     [Header("Identificador")]
     [SerializeField] private string puzzleId = "box_main";
     [Header("Configuracion del puzzle")]
-    [SerializeField] private List<BoxButton> solution = new()
+    [SerializeField]
+    private List<BoxButton> solution = new()
     {
         BoxButton.Taza,
         BoxButton.Radio,
         BoxButton.Lampara
     };
 
+    [Header("Tiempo de validacion")]
+    [SerializeField, Min(0f)] private float resultDelay = 1f;
+
+    [Header("Sonidos")]
+    [SerializeField] private UnityEvent onButtonPressed;
+    [SerializeField] private UnityEvent onCorrect;
+    [SerializeField] private UnityEvent onFailed;
+
+    public event Action OnAttemptFailed;
+
+    private bool isResolving = false;
+    public bool IsResolving => isResolving;
     [Header("Eventos")]
     [SerializeField] private UnityEvent onSolved;
-    private int nButtonsPressed = 0;
+    private readonly List<BoxButton> currentSequence = new();
 
-      //Implementación de IPuzzle
+    public IReadOnlyList<BoxButton> CurrentSequence => currentSequence;
+
+    //Implementación de IPuzzle
     public event Action<IPuzzle> OnSolved;
     public bool IsSolved { get; private set; } = false;
-    public string PuzzleId =>puzzleId;
+    public string PuzzleId => puzzleId;
+    public event Action OnSequenceChanged;
 
     public void Start()
     {
@@ -45,24 +62,51 @@ public class BoxPuzzle : MonoBehaviour,IPuzzle
 
     public void ButtonPressed(BoxButton buttonName)
     {
-        // Si ya esta resuelto, ignoramos los botones.
-        if (IsSolved || solution == null || solution.Count == 0)
+        if (IsSolved || isResolving ||
+            solution == null || solution.Count == 0)
             return;
-        // Comprobar el siguiente elemento de la secuencia.
-        if (buttonName == solution[nButtonsPressed])
+
+        // Guardar pulsacion y reproducir clic.
+        currentSequence.Add(buttonName);
+        onButtonPressed?.Invoke();
+
+        // Bloquear nuevas entradas al completar la secuencia.
+        bool completed = currentSequence.Count == solution.Count;
+
+        if (completed)
+            isResolving = true;
+
+        // Actualizar las imagenes.
+        OnSequenceChanged?.Invoke();
+
+        if (!completed)
+            return;
+
+        // Validar y reproducir el sonido correspondiente.
+        bool correct = CheckSolution();
+
+        if (correct)
         {
-            nButtonsPressed++;
-            Debug.Log("Boton correcto: " + buttonName);
-            if (nButtonsPressed == solution.Count)
-            {
-                SolvePuzzle();
-            }
+            onCorrect?.Invoke();
         }
         else
         {
-            Debug.Log("Boton incorrecto: " + buttonName);
-            ResetPuzzle();
+            onFailed?.Invoke();
+            OnAttemptFailed?.Invoke();
         }
+
+        // Ambos resultados utilizan el mismo retraso.
+        StartCoroutine(ResolveAttempt(correct));
+    }
+    private bool CheckSolution()
+    {
+        for (int i = 0; i < solution.Count; i++)
+        {
+            if (currentSequence[i] != solution[i])
+                return false;
+        }
+
+        return true;
     }
 
     private void SolvePuzzle()
@@ -77,6 +121,24 @@ public class BoxPuzzle : MonoBehaviour,IPuzzle
 
     public void ResetPuzzle()
     {
-        nButtonsPressed = 0;
+        if (IsSolved || isResolving)
+            return;
+
+        currentSequence.Clear();
+        OnSequenceChanged?.Invoke();
+    }
+    private IEnumerator ResolveAttempt(bool correct)
+    {
+        yield return new WaitForSecondsRealtime(resultDelay);
+
+        if (correct)
+        {
+            SolvePuzzle();
+        }
+        else
+        {
+            isResolving = false;
+            ResetPuzzle();
+        }
     }
 }
