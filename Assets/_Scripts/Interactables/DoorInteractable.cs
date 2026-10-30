@@ -41,12 +41,12 @@ public class DoorInteractable : AInteractable
     public void OpenDoor()
     {
         OnDoorOppened?.Invoke();
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
         GameManager.Instance.SetState(GameState.ENDING);
     }
     public void CloseDoor()
     {
         OnDoorClosed?.Invoke();
-        gameObject.SetActive(true);
+        //gameObject.SetActive(true);
     }
 }

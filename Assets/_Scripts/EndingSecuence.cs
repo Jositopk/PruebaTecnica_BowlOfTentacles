@@ -15,6 +15,7 @@ public class EndingSequence : MonoBehaviour
     [SerializeField] private CanvasGroup blackFade;
     [Header("Eventos")]
     [SerializeField] private UnityEvent onDoorClose;
+    [SerializeField] private UnityEvent onVoiceSound;
 
     private GameManager gameManager;
     private bool hasStarted;
@@ -57,6 +58,7 @@ public class EndingSequence : MonoBehaviour
 
         // Mostrar el mensaje narrativo.
         UIManager.Instance.ShowInformation("No te vayas todavía", messageDuration);
+        onVoiceSound?.Invoke();
 
         yield return new WaitForSecondsRealtime(messageDuration);
 
