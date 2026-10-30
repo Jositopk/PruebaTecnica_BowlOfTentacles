@@ -13,6 +13,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private float dropOffset = 0.2f;
     [SerializeField] private LayerMask dropLayers = ~0;
 
+
     public ItemData CurrentItem { get; private set; }
 
     // Referencia al objeto fisico recogido.
@@ -39,9 +40,8 @@ public class PlayerInventory : MonoBehaviour
 
         // Colocar el objeto en la mano.
         heldObject.transform.SetParent(hand, false);
-        heldObject.transform.localPosition = Vector3.zero;
-        heldObject.transform.localRotation = Quaternion.identity;
-
+        heldObject.transform.localPosition = item.HoldPosition;
+        heldObject.transform.localRotation = Quaternion.Euler(item.HoldRotation);
         OnItemPickedUp?.Invoke(item);
 
         return true;
@@ -58,7 +58,7 @@ public class PlayerInventory : MonoBehaviour
         // Buscar donde esta apuntando el jugador.
         Vector3 dropPosition = cam.position + cam.forward * dropDistance;
 
-        if (Physics.Raycast(cam.position, cam.forward,out RaycastHit hit, dropDistance,dropLayers, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, dropDistance, dropLayers, QueryTriggerInteraction.Ignore))
         {
             dropPosition = hit.point + hit.normal * dropOffset;
         }

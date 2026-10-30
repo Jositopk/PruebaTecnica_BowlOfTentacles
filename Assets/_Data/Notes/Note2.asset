@@ -14,3 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NoteData
   title: nota2
   content: "Cada noche preparaba una taza de t\xE9. Despu\xE9s escuchaba las noticias en la radio del sal\xF3n. Antes de acostarme dejaba encendida la l\xE1mpara del pasillo"
+  backgroundSprite: {fileID: 21300000, guid: 7201d06122ab7b64580f33ddf380fca0, type: 3}
+  backgroundSize: {x: 500, y: 500}
+  textPosition: {x: 0, y: 0}
+  textSize: {x: 450, y: 450}
+  fontSize: 45
+  characterSpacing: 0
+  wordSpacing: 0
+  lineSpacing: 0
+  paragraphSpacing: 0

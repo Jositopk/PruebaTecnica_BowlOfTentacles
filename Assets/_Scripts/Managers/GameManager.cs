@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         onGameInitialized?.Invoke();
-        UIManager.Instance.ShowInformation("He venido a recoger la caja de mamá. Después entregaré las llaves", 2);
         UpdatePlayerControls();
     }
     private void OnEnable()
@@ -111,5 +110,9 @@ public class GameManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+    public void ShowInitialMessage()
+    {
+        UIManager.Instance.ShowInformation("He venido a recoger la caja de mamá. Después entregaré las llaves", 3, () => SetState(GameState.ONGOING));
     }
 }

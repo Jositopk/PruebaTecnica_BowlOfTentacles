@@ -140,20 +140,16 @@ public class UIManager : MonoBehaviour
     }
 
     // Mensaje con duración fija y pausa.
-    public void ShowInformation(string message, float seconds)
+    public void ShowInformation(
+    string message,
+    float displayTime,
+    Action onCompleted = null)
     {
-        if (informationText == null ||
-            string.IsNullOrWhiteSpace(message) ||
-            isBlockingMessage)
+        if (informationCoroutine != null)
             return;
 
-        if (informationCoroutine != null)
-            StopCoroutine(informationCoroutine);
-
-        isBlockingMessage = true;
-
         informationCoroutine = StartCoroutine(
-            ShowInformationCoroutine(message, seconds)
+            ShowInformationCoroutine(message, displayTime, onCompleted)
         );
     }
 
@@ -180,51 +176,44 @@ public class UIManager : MonoBehaviour
         informationCoroutine = null;
     }
 
-    private IEnumerator ShowInformationCoroutine(string message, float displayTime)
+
+    private IEnumerator ShowInformationCoroutine(
+        string message,
+        float displayTime,
+        Action onCompleted)
     {
+        isBlockingMessage = true;
+
         informationText.text = message;
         informationText.alpha = 1f;
         informationText.gameObject.SetActive(true);
 
-        GameManager gm = GameManager.Instance;
-        GameState previousState = gm.CurrentState;
-
-        // Pausar solo si estamos jugando.
-        // Durante la introduccion mantenemos STARTING.
-        if (previousState == GameState.ONGOING)
-            gm.SetState(GameState.PAUSED);
-
+        // Mantener mensaje visible.
         yield return new WaitForSecondsRealtime(displayTime);
 
-        // Recuperar el estado correspondiente.
-        if (previousState == GameState.STARTING &&
-            gm.CurrentState == GameState.STARTING)
-            gm.SetState(GameState.ONGOING);
-        else if (previousState == GameState.ONGOING &&
-                 gm.CurrentState == GameState.PAUSED)
-            gm.SetState(GameState.ONGOING);
-
-        // Recuperar el cursor al volver al juego.
-        if (gm.CurrentState == GameState.ONGOING && !IsUIOpen)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-
-        // Fade-out
+        // Fade-out.
         float elapsed = 0f;
+
         while (elapsed < fadeDuration)
         {
             elapsed += Time.unscaledDeltaTime;
+
             informationText.alpha =
                 1f - Mathf.Clamp01(elapsed / fadeDuration);
+
             yield return null;
         }
 
+        informationText.alpha = 0f;
         informationText.gameObject.SetActive(false);
+
         informationCoroutine = null;
         isBlockingMessage = false;
+
+        // Notificar que el mensaje ha terminado.
+        onCompleted?.Invoke();
     }
+
 
     #endregion
     public void ShowEndingPanel()

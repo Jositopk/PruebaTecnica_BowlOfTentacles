@@ -14,3 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NoteData
   title: Nota 1
   content: "Para abrirla, recuerda mis noches: primero lo que preparaba en la\r\ncocina, despu\xE9s lo que escuchaba y, por \xFAltimo, la luz que dejaba encendida"
+  backgroundSprite: {fileID: 21300000, guid: 20024ff60ed44f0448f3269e8b6bf4e8, type: 3}
+  backgroundSize: {x: 500, y: 650}
+  textPosition: {x: 0, y: 0}
+  textSize: {x: 350, y: 500}
+  fontSize: 35
+  characterSpacing: 0
+  wordSpacing: 0
+  lineSpacing: -63
+  paragraphSpacing: 0

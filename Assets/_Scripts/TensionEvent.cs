@@ -1,12 +1,16 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.UI;
 
 public class TensionEvent : MonoBehaviour
 {
     [Header("Audio")]
     [SerializeField] private AudioSource footstepsSource;
     [SerializeField] private AudioSource ambienceSource;
+    [SerializeField] private LightController hallwayLight;
+    [SerializeField] private LightController KitchenLight;
 
     [Header("Configuracion")]
     [SerializeField, Min(0f)] private float silenceDuration = 2f;
@@ -36,6 +40,10 @@ public class TensionEvent : MonoBehaviour
         float originalVolume = resumeAmbience ? ambienceSource.volume : 0f;
         if (resumeAmbience)
             ambienceSource.Pause();
+        //apagamos Luces
+        yield return new WaitForSeconds(0.1f);
+        hallwayLight.Toggle();
+        KitchenLight.Toggle();
         // Dos segundos de silencio.
         yield return new WaitForSeconds(silenceDuration);
 
@@ -46,7 +54,9 @@ public class TensionEvent : MonoBehaviour
 
             yield return new WaitForSeconds(footstepsSource.clip.length);
         }
-
+        //Encendemos Luces
+        hallwayLight.Toggle();
+        KitchenLight.Toggle();
         // Recuperar el ambiente con Fade In.
         if (resumeAmbience)
         {
