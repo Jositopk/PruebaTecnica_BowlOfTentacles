@@ -1,0 +1,26 @@
+*[Kanban](https://miro.com/app/board/uXjVEVLqikQ=/?moveToWidget=3458764688472728558&cot=14)*
+
+| Pendiente | En progreso | Completado |
+| --- | --- | --- |
+|  |  | **01 \- Preproduccion y organización**<br><br>`Descripción: MiniPreproduccion, plano inicial, tablero kanban y repositorio Git preparados` `Asignado a: Jose` `Estimación: 3` `Prioridad: Alta` |
+|  |  | **02 \- Controlador FPS**<br><br>`Descripción: Starter Assets configurado con Input System` `Asignado a: Jose` `Estimación: 2` `Prioridad: Alta` |
+|  |  | **03 \- Sistema de interacción**<br><br>`Descripción: raycast, Interfaz IInteractable y componentes interactable reutilizables funcionando` `Asignado a: Jose` `Estimación: 2` `Prioridad: Alta` |
+|  |  | **04 \- Busqueda de asset externos**<br><br>`Descripción: Busqueda prioritartia de assets importantes como la caja llave o notas\.` `Asignado a: Jose` `Estimación: 1` `Prioridad: Baja` |
+|  |  | **05 \- Escenario y distribución de la casa**<br><br>`Descripción: Recibidor/ pasillo y salón conectados con mobiliario y ibjetos obligatorios` `Asignado a: Jose` `Estimación: 4` `Prioridad: Media` |
+|  |  | **06 \- Sistema de pistas y notas**<br><br>`Descripción: Ambas notas puedan abrirse, cerrarse  y releerse con cualquier orden, con sus textos exactos` `Asignado a: Jose` `Estimación: 3` `Prioridad: Media` |
+|  |  | **07 \- Puzzle de la caja**<br><br>`Descripción: Botones, taza, radio y lámpara; validación de secuencias, feedback, borrado y apertura única\.` `Asignado a: Jose` `Estimación: 6` `Prioridad: Media` |
+|  |  | **08 \- Progresión, llave y salida**<br><br>`Descripción: Llave recogible una sola vez, estando registrado y puerta desbloqueada solo después de recogerla` `Asignado a: Jose` `Estimación: 3` `Prioridad: Media` |
+|  |  | **09 \- Evento de tensión**<br><br>`Descripción: Silencio, tres pasos y desplazamiento oculto de la silla tras cerrar por primera vez la nota de la cocina` `Asignado a: Jose` `Estimación: 3` `Prioridad: Media` |
+|  |  | **09\.1 \- secuencia de sonido**<br><br>`Descripción: implementar 2s de sonido seguidos de 2 pasos con audio espacial procedentes del pasillo` `Asignado a: Jose` `Prioridad: Media` |
+|  |  | **09\.2  \- Desplazamiento de la silla**<br><br>`Descripción: configurar posiciones de la silla asegurando que se mueve fuera de cámara` `Asignado a: Jose` `Prioridad: Media` |
+|  |  | **09\.3 \- Gestión de estados y reinicio**<br><br>`Descripción: Registrar que el evento se ejecuta, impedir duplicaciones y r4estableces silla sonido e indicadores al reiniciar\.` `Asignado a: Jose` `Prioridad: Media` |
+|  |  | **10 \- Secuencia final y reinicio**<br><br>`Descripción: Puerta, frase final, cierre, fundido, FIn, Reiniciar y Salir; sin duplicación y con reinicio completo` `Asignado a: Jose` `Estimación: 3` `Prioridad: Media` |
+|  |  | **11 \- Ambientación y pulido audiovisual**<br><br>`Descripción: Iluminación, materiales y ambientación básica coherentes, sin afectar el recorrido ni estabilidad` `Asignado a: Jose` `Estimación: 1` `Prioridad: Baja` |
+|  |  | **12 \- Pruebas funcionales y correcciones**<br><br>`Descripción: Comprobaciones de aceptación superadas y recorrido probado en 2\-5 minutos, preferiblemente con otra persona` `Asignado a: Jose` `Estimación: 3` `Prioridad: Media` |
+|  |  | **13 \- Documentación técnica y seguimiento**<br><br>`Descripción: README, mapa técnico, guía de ampliación, diseño y validación, memoria de ejecucion completos` `Asignado a: Jose` `Estimación: 5` `Prioridad: Media` |
+|  |  | **13\.1 \- README**<br><br>`Descripción: Versión exacta de Unity, dependencias, instalación, controles, ejecución, generacio y ubicación de build, problemas conocidos e indice de documentos` `Asignado a: Jose` `Prioridad: Media` |
+|  |  | **13\.2 \- Mapa Técnico**<br><br>`Descripción: Documentar carpetas, componentes, responsabilidades, comunicación entre interacción puzzle y progresión de estados, desiciones técnicas y limitaciones\.` `Asignado a: Jose` `Prioridad: Media` |
+|  |  | **13\.4 \- Diseño y validación**<br><br>`Descripción: Documentar historia, recorrido esèrador, textors y solución del puzzle, momento de tesión y condicion final; incluir pruebas manuales de los siete criterios de aceptación` `Asignado a: Jose` `Prioridad: Media` |
+|  |  | **13\.5 \- Memoria de ejecucción**<br><br>`Descripción: Registar por jonada tareas, horas reales, decisiones, problemas, soluciones y pruebas\. Comparar estimaciones con tiempos reales, cambios de alcance, pendientes y mejoras futuras; relacionar commits relevantes\.` `Asignado a: Jose` `Prioridad: Media` |
+|  |  | **13\-6 \- Recursos y revisión del onboarding**<br><br>`Descripción: Registrar recursos externos, licencias y herramientas de IA utilizada, revisar enlaces, rutas, referencias y coherencia de las instrucciones con la entrega` `Asignado a: Jose` `Prioridad: Media` |
+|  |  | **14 \- Build Windows y entrega**<br><br>`Descripción: Build Comprobad, repositorio limpio, archivos requeridos incluido y entrega reproducible` `Asignado a: Jose` `Estimación: 2` `Prioridad: Media` |

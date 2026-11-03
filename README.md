@@ -11,7 +11,6 @@ Prototipo de exploración y puzles en primera persona desarrollado en **Unity** 
 - **Para abrir el proyecto:** PC compatible con Unity 6; se recomienda teclado y ratón.
 - **Para generar la build entregada:** módulo de compilación para **Windows** y destino **Windows x86_64**.
 - **Para ejecutar la build incluida:** **Windows de 64 bits**. No es necesario instalar el Editor de Unity para jugar.
-- **Versión interna del prototipo:** `0.1.0` (`ProjectSettings/ProjectSettings.asset`).
 
 ### Dependencias
 
@@ -27,7 +26,9 @@ Las dependencias se declaran en `Packages/manifest.json` y se fijan en `Packages
 | `com.unity.ai.navigation` | `2.0.14` | Herramientas de navegación disponibles en el proyecto |
 | `com.unity.visualscripting` | `1.9.12` | Paquete de Visual Scripting instalado |
 
-También aparecen paquetes de colaboración, pruebas e integración con IDE; la **lista completa y sus versiones** se conserva en el manifiesto. Los recursos usados por las escenas están incluidos en `Assets/`; para abrir esta copia no se indica ningún paso adicional de importación manual de paquetes externos.
+Las dependencias del proyecto se encuentran definidas en `Packages/manifest.json` y se gestionan automáticamente mediante Unity Package Manager.
+
+Todos los recursos necesarios para ejecutar el juego están incluidos en la carpeta `Assets/`, por lo que no es necesario importar recursos externos manualmente.
 
 ## 2. Inicio rápido
 
@@ -81,7 +82,7 @@ La acción de interacción tiene un alcance limitado y requiere apuntar hacia un
 4. Regresa a la **puerta de salida** e interactúa con ella llevando la llave.
 5. Observa la secuencia final. La pantalla final ofrece controles para **reiniciar** o **salir**.
 
-El evento de tensión se activa durante la exploración en relación con una de las notas; no requiere ninguna tecla especial. Para conocer la solución del puzle y el recorrido esperado con mayor detalle, consulta [Diseño y validación](Docs/Dise%C3%B1o%20y%20validaci%C3%B3n.docx).
+El evento de tensión se activa durante la exploración en relación con una de las notas; no requiere ninguna tecla especial. Para conocer la solución del puzle y el recorrido esperado con mayor detalle, consulta [Diseño y validación](Docs/DisenoYvalidacion.docx).
 
 ## 6. Generar una build de Windows
 
@@ -93,24 +94,6 @@ El evento de tensión se activa durante la exploración en relación con una de 
 6. Guarda el ejecutable con el nombre `PruebaTecnica_BowlOfTentacles.exe` en la carpeta **`Build/`** de la raíz del proyecto.
 7. Comprueba la compilación abriendo el `.exe` y recorriendo la introducción, las interacciones, el puzle y la salida.
 
-La salida esperada contiene, entre otros archivos:
-
-```text
-Build/
-├── PruebaTecnica_BowlOfTentacles.exe
-├── PruebaTecnica_BowlOfTentacles_Data/
-├── UnityPlayer.dll
-├── UnityCrashHandler64.exe
-├── MonoBleedingEdge/
-└── D3D12/                     # y otras DLL de soporte
-```
-
-**Distribución:** entrega la carpeta de la build con sus archivos y subcarpetas necesarios, preferiblemente comprimida en un ZIP. La carpeta generada `*_BackUpThisFolder_ButDontShipItWithYourGame/`, si existe, **no debe distribuirse**. No se debe enviar el `.exe` aislado.
-
-**Atención al repositorio:** `.gitignore` excluye `/Build/`. Por tanto, **clonar el repositorio no garantiza disponer del ejecutable**: la build se debe adjuntar por separado a la entrega (por ejemplo, en un ZIP o como archivo de una release) o generarla siguiendo los pasos anteriores.
-
-Documentación de referencia: [Build Profiles — Unity 6000.6](https://docs.unity.com/en-us/engine/6000.6/manual/building-and-publishing/build-settings/create-build-profile).
-
 ## 7. Limitaciones y problemas conocidos
 
 - **Plataforma de entrega:** el ejecutable incluido es para **Windows x86_64**. No se proporciona una build de macOS, Linux o Web.
@@ -118,11 +101,9 @@ Documentación de referencia: [Build Profiles — Unity 6000.6](https://docs.uni
 - **Escena inicial:** ejecutar `Casa` directamente desde el Editor **omite el vídeo** de `Intro`.
 - **Reinicio:** la opción de reinicio recarga la **escena activa (`Casa`)**; no vuelve a reproducir la introducción.
 - **Acciones no utilizadas:** saltar, esprintar y agacharse están definidas en el asset de entrada, pero no tienen comportamiento en el controlador actual.
-- **Verificación:** la estructura del proyecto y los scripts se han revisado, pero **esta guía no implica una ejecución o prueba de aceptación realizada en otra máquina**. Cualquier incidencia detectada durante las pruebas de entrega deberá registrarse aquí.
 
 ### Solución rápida de incidencias
 
-- **No encuentro `Build/` después de clonar:** es normal; está excluida del repositorio. Descarga la build distribuida por separado o genérala.
 - **Faltan paquetes o aparecen errores al abrir:** verifica la versión `6000.6.3f1`, la conexión necesaria para resolver paquetes y la presencia de `Packages/manifest.json` y `Packages/packages-lock.json`.
 - **La build no abre o faltan archivos:** comprueba que has extraído **toda la carpeta** de la build, no solo el `.exe`.
 - **La compilación abre una escena incorrecta:** revisa el orden y la activación de escenas en **File → Build Profiles**.
@@ -135,9 +116,9 @@ Los documentos complementarios se encuentran en [`Docs/`](Docs/):
 | --- | --- |
 | [Mini preproducción](Docs/MiniPreproduccion.docx) | Planteamiento y alcance inicial del prototipo |
 | [Mapa técnico](Docs/MapaTecnico.docx) | Arquitectura, componentes y relaciones entre sistemas |
-| [Guía para añadir contenido](Docs/GuiaA%C3%B1adirContenido.docx) | Criterios y pasos de ampliación del proyecto |
-| [Diseño y validación](Docs/Dise%C3%B1o%20y%20validaci%C3%B3n.docx) | Experiencia prevista, puzle y criterios de comprobación |
-| [Memoria de ejecución](Docs/MemoriaDeEjecuci%C3%B3n.docx) | Seguimiento del trabajo, decisiones y resultados |
+| [Guía para añadir contenido](Docs/GuiaAnadirContenido.docx) | Criterios y pasos de ampliación del proyecto |
+| [Diseño y validación](Docs/DisenoYvalidacion.docx) | Experiencia prevista, puzle y criterios de comprobación |
+| [Memoria de ejecución](Docs/MemoriaDeEjecucion.docx) | Seguimiento del trabajo, decisiones y resultados |
 | [Kanban inicial](Docs/KanbanVersionInicial.md) | Planificación inicial de tareas |
 
 ---
