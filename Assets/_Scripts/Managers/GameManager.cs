@@ -113,6 +113,6 @@ public class GameManager : MonoBehaviour
     }
     public void ShowInitialMessage()
     {
-        UIManager.Instance.ShowInformation("He venido a recoger la caja de mamá. Después entregaré las llaves", 3, () => SetState(GameState.ONGOING));
+        UIManager.Instance.ShowInformation("He venido a recoger la caja de mamá. Después entregaré las llaves", 4, () => SetState(GameState.ONGOING));
     }
 }
