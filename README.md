@@ -1,126 +1,152 @@
-# Prueba técnica — Bowl of Tentacles
+# La última visita a casa — Prueba técnica de Bowl of Tentacles
 
-Prototipo de exploración y puzles en primera persona desarrollado en **Unity** como prueba técnica para **Bowl of Tentacles**. El jugador explora una vivienda, consulta pistas, resuelve un puzle para obtener una llave y trata de salir, mientras se desencadena un evento de tensión.
+Experiencia breve de **terror narrativo en primera persona**, desarrollada con **Unity y C#** como prueba técnica para Bowl of Tentacles. El jugador regresa a una casa familiar, examina pistas, resuelve un puzle para recuperar una llave y trata de salir mientras sucede un acontecimiento inquietante.
 
-> **Inicio rápido:** el objetivo de esta guía es permitir abrir y ejecutar el proyecto en aproximadamente **15 minutos de intervención**, sin contar descargas ni instalaciones. El tiempo de importación inicial de Unity puede variar según el equipo. Si solo quieres jugar en Windows, utiliza directamente la build distribuida.
+El repositorio incluye el **proyecto de Unity**, una **build ejecutable para Windows** y la documentación de diseño, arquitectura, ampliación, organización y ejecución del trabajo.
 
-## 1. Requisitos y versión del proyecto
+> **Inicio rápido:** para jugar no necesitas instalar Unity. Si vas a revisar el código, el objetivo es poder abrir y ejecutar el proyecto siguiendo esta guía en unos 15 minutos de intervención, sin contar descargas e importación de recursos.
 
-- **Unity Editor:** `6000.6.3f1` (revisión `45d8eee7de74`). La versión exacta está registrada en `ProjectSettings/ProjectVersion.txt`.
-- **Unity Hub:** recomendado para instalar y seleccionar esa versión del Editor.
-- **Para abrir el proyecto:** PC compatible con Unity 6; se recomienda teclado y ratón.
-- **Para generar la build entregada:** módulo de compilación para **Windows** y destino **Windows x86_64**.
-- **Para ejecutar la build incluida:** **Windows de 64 bits**. No es necesario instalar el Editor de Unity para jugar.
+## 1. Requisitos y dependencias
 
-### Dependencias
+- **Unity Editor:** `6000.6.3f1` (revisión `45d8eee7de74`), indicada en `ProjectSettings/ProjectVersion.txt`.
+- **Para editar el proyecto:** Unity Hub y la versión de Unity anterior.
+- **Para generar una build:** soporte de compilación para **Windows x86_64 (64 bits)**.
+- **Para jugar a la build incluida:** Windows de 64 bits, teclado y ratón. No se necesita Unity Editor.
 
-Las dependencias se declaran en `Packages/manifest.json` y se fijan en `Packages/packages-lock.json`. Unity Package Manager debe resolverlas automáticamente al abrir el proyecto.
+Los paquetes se especifican en `Packages/manifest.json` y `Packages/packages-lock.json`. Unity Package Manager los resolverá al abrir el proyecto. Entre los principales se encuentran:
 
-| Paquete | Versión | Uso principal |
-| --- | --- | --- |
-| `com.unity.render-pipelines.universal` | `17.6.0` | Renderizado URP |
-| `com.unity.inputsystem` | `1.20.1` | Entrada de teclado y ratón |
-| `com.unity.ugui` | `2.6.0` | Interfaces de usuario |
-| `com.unity.probuilder` | `6.1.4` | Construcción y edición del escenario |
-| `com.unity.timeline` | `6.6.0` | Herramientas de secuenciación disponibles en el proyecto |
-| `com.unity.ai.navigation` | `2.0.14` | Herramientas de navegación disponibles en el proyecto |
-| `com.unity.visualscripting` | `1.9.12` | Paquete de Visual Scripting instalado |
+- **Universal Render Pipeline (URP)** — `17.6.0`: renderizado e iluminación.
+- **Input System** — `1.20.1`: teclado y ratón.
+- **Unity UI (uGUI)** — `2.6.0`: interfaces de notas, caja y final.
+- **ProBuilder** — `6.1.4`: construcción del escenario.
 
-Las dependencias del proyecto se encuentran definidas en `Packages/manifest.json` y se gestionan automáticamente mediante Unity Package Manager.
-
-Todos los recursos necesarios para ejecutar el juego están incluidos en la carpeta `Assets/`, por lo que no es necesario importar recursos externos manualmente.
+El proyecto también incluye otros paquetes declarados en el manifiesto, así como los recursos utilizados en `Assets/`. No es necesario importar manualmente modelos, fuentes o efectos para abrir la escena entregada.
 
 ## 2. Inicio rápido
 
-### Opción A — Ejecutar la build (sin Unity)
+### Opción A — Jugar en Windows, sin Unity
 
-1. Obtén el **paquete de build** y extrae su contenido conservando la estructura de carpetas.
-2. En Windows, abre `Build/PruebaTecnica_BowlOfTentacles.exe`.
-3. Espera a que finalice el vídeo inicial o pulsa **Espacio** para omitirlo.
-4. Juega con teclado y ratón (controles en el apartado 4).
+La versión ejecutable del videojuego está disponible en GitHub Releases.
 
-**Importante:** el `.exe` no funciona de forma independiente: debe permanecer junto a `PruebaTecnica_BowlOfTentacles_Data/`, `UnityPlayer.dll` y las demás dependencias generadas. No traslades únicamente el ejecutable a otra carpeta.
+1. Descargar el archivo PruebaTecnica_BowlOfTentacles_v1.0.0_Windows.zip.
+2. Extraer todo el contenido del ZIP.
+3. Ejecutar PruebaTecnica_BowlOfTentacles.exe.
 
-### Opción B — Abrir y ejecutar el proyecto en Unity
+ó
 
-1. Descarga o clona el repositorio (o descomprime el ZIP del **proyecto fuente**).
-2. Abre **Unity Hub** → **Add / Add project from disk** y selecciona la carpeta raíz `PruebaTecnica_BowlOfTentacles/`, la que contiene `Assets/`, `Packages/` y `ProjectSettings/`.
-3. Abre el proyecto con **Unity `6000.6.3f1`**. Permite que Unity importe los recursos y resuelva las dependencias.
-4. En la ventana **Project**, abre `Assets/Scenes/Intro.unity`.
-5. Pulsa **Play**. El vídeo de presentación dará paso a `Casa` automáticamente (o puedes omitirlo con **Espacio**).
+1. Descargar el archivo PruebaTecnica_BowlOfTentacles_v1.0.0_Windows.zip.
+2. Abre la carpeta [`Build/`](Build/).
+3. Ejecuta **`PruebaTecnica_BowlOfTentacles.exe`**.
+4. Espera a que termine la introducción o pulsa **Espacio** para omitirla.
 
-> Para probar directamente la jugabilidad, abre `Assets/Scenes/Casa.unity` y pulsa **Play**. Esta opción **omite la introducción**.
+**Importante:** conserva juntos el `.exe`, `PruebaTecnica_BowlOfTentacles_Data/`, `UnityPlayer.dll` y los demás archivos de `Build/`. Copiar únicamente el ejecutable impide iniciar el juego.
 
-## 3. Escenas y punto de entrada
+### Opción B — Abrir el proyecto en Unity
 
-| Orden en build | Escena | Función |
-| --- | --- | --- |
-| `0` | `Assets/Scenes/Intro.unity` | Vídeo de introducción y carga de la escena de juego |
-| `1` | `Assets/Scenes/Casa.unity` | Escenario, interacción, puzle, evento de tensión y final |
+1. Descarga o clona el repositorio.
+2. En **Unity Hub**, selecciona **Add / Add project from disk** y elige la carpeta raíz, que contiene `Assets/`, `Packages/` y `ProjectSettings/`.
+3. Ábrelo con **Unity `6000.6.3f1`** y espera a que termine la importación y resolución de paquetes.
+4. Abre `Assets/Scenes/Intro.unity` y pulsa **Play**.
+5. La introducción cargará automáticamente la escena `Casa`. También puedes omitir el vídeo con **Espacio**.
 
-`Assets/Scenes/SampleScene.unity` figura en la configuración global, pero está **desactivada**. Las demás escenas de trabajo no forman parte de la build principal. Esta configuración está en `ProjectSettings/EditorBuildSettings.asset`.
+Para entrar directamente al recorrido jugable, abre `Assets/Scenes/Casa.unity` y pulsa **Play**. En este caso se omite la introducción audiovisual.
+
+## 3. Escenas y estructura principal
+
+Las escenas activadas en la lista de compilación, en este orden, son:
+
+1. **`Assets/Scenes/Intro.unity`** — Secuencia audiovisual de presentación y transición al juego.
+2. **`Assets/Scenes/Casa.unity`** — Exploración, interacción, pistas, puzle, evento de tensión y desenlace.
+
+`SampleScene.unity` está desactivada y otras escenas de trabajo no forman parte de la build. La lista global se encuentra en `ProjectSettings/EditorBuildSettings.asset`.
+
+Organización general:
+
+- **`Assets/_Scripts/`** — Sistemas de interacción, jugador, puzles, managers y secuencias.
+- **`Assets/_Prefabs/`** — Objetos reutilizables del jugador, escenario, caja, notas e interfaz.
+- **`Assets/_Data/`** — Datos de notas y objetos mediante ScriptableObjects.
+- **`Assets/_Models/`, `Assets/_Textures/`, `Assets/_Materials/`** — Recursos visuales.
+- **`Assets/_Sounds/`, `Assets/_Sprites/`, `Assets/_Fonts/`** — Audio y recursos de interfaz.
+- **`Assets/Scenes/`** — Escenas del proyecto.
+- **`Docs/`** — Documentación del diseño, implementación y proceso.
+
+Para las responsabilidades y relaciones entre componentes, consulta el [Mapa técnico](Docs/MapaTecnico.pdf).
 
 ## 4. Controles
 
-| Acción | Control |
-| --- | --- |
-| Moverse | **W A S D** o **flechas** |
-| Mirar alrededor | **Ratón** |
-| Interactuar / leer / recoger / abrir | **E** (apuntando al objeto) |
-| Soltar el objeto transportado | **Q** |
-| Cerrar una nota o la interfaz de la caja | **Esc** |
-| Seleccionar símbolos y pulsar botones en la interfaz de la caja | **Clic izquierdo** |
-| Omitir el vídeo de introducción | **Espacio** |
+- **W, A, S, D** o **flechas**: desplazarse.
+- **Ratón**: mirar alrededor.
+- **E**: interactuar, examinar, leer, recoger objetos o abrir la puerta (mirando al objeto y dentro del alcance).
+- **Q**: soltar el objeto que llevas.
+- **Esc**: cerrar una nota o la interfaz de la caja.
+- **Clic izquierdo**: seleccionar botones y símbolos en las interfaces.
+- **Espacio**: omitir el vídeo inicial.
 
-La acción de interacción tiene un alcance limitado y requiere apuntar hacia un objeto interactuable. **Esc** cierra interfaces; no se ha implementado como menú de pausa general. Aunque el archivo `InputSystem_Actions.inputactions` define más acciones, **saltar, esprintar y agacharse no están implementados en el controlador FPS utilizado**.
+`Esc` **no abre un menú de pausa general**. Aunque el Input System contiene acciones adicionales, el controlador de esta experiencia no implementa salto, esprint ni agacharse.
 
-## 5. Cómo completar el recorrido
+## 5. Recorrido de juego
 
-1. Explora la casa y **lee las notas** para descubrir las pistas.
-2. Encuentra la **caja** e introduce la secuencia de símbolos sugerida por las pistas. Puedes borrar un intento mediante el botón correspondiente.
-3. Al resolver el puzle, **recoge la llave**.
-4. Regresa a la **puerta de salida** e interactúa con ella llevando la llave.
-5. Observa la secuencia final. La pantalla final ofrece controles para **reiniciar** o **salir**.
+1. Explora la casa y lee las notas para entender la rutina nocturna descrita en las pistas.
+2. Examina la caja del salón e introduce la secuencia de tres símbolos. Puedes borrar un intento antes de completarlo y volver a probar si fallas.
+3. Al abrirse la caja, **recoge la llave explícitamente**.
+4. Regresa a la puerta de salida y úsala con la llave en tu inventario.
+5. Observa el final y utiliza las opciones **Reiniciar** o **Salir**.
 
-El evento de tensión se activa durante la exploración en relación con una de las notas; no requiere ninguna tecla especial. Para conocer la solución del puzle y el recorrido esperado con mayor detalle, consulta [Diseño y validación](Docs/DisenoYvalidacion.docx).
+Durante la exploración se produce un evento de tensión asociado a una de las notas. No necesitas activar ninguna opción adicional. El recorrido completo, los textos y la solución del puzle se explican en [Diseño y validación](Docs/DisenoYvalidacion.pdf).
 
-## 6. Generar una build de Windows
+## 6. Generar la build de Windows
 
-1. Abre el proyecto con la versión indicada de Unity.
+1. Abre el proyecto con Unity `6000.6.3f1`.
 2. Ve a **File → Build Profiles**.
-3. Selecciona **Windows** (o crea un perfil para Windows si lo necesitas) y actívalo mediante **Switch Profile** cuando proceda. Comprueba que la arquitectura de destino sea **x86_64 / 64-bit**.
-4. Revisa la **Scene List**: deben estar **activadas y en este orden** `Intro` y `Casa`. `SampleScene` debe seguir desactivada. Si el perfil no sobrescribe la lista de escenas, se utilizará la lista global del proyecto.
-5. Selecciona **Build** para generar los archivos, o **Build and Run** para generarlos y ejecutarlos.
-6. Guarda el ejecutable con el nombre `PruebaTecnica_BowlOfTentacles.exe` en la carpeta **`Build/`** de la raíz del proyecto.
-7. Comprueba la compilación abriendo el `.exe` y recorriendo la introducción, las interacciones, el puzle y la salida.
+3. Selecciona el perfil **Windows**, cambia a ese perfil si procede y comprueba el destino **Windows x86_64**.
+4. Revisa la lista de escenas: `Intro` debe estar antes de `Casa`, ambas activadas. `SampleScene` debe permanecer desactivada. El perfil entregado utiliza la lista global del proyecto.
+5. Pulsa **Build** o **Build and Run**.
+6. Selecciona una ubicación de salida y utiliza el nombre **`PruebaTecnica_BowlOfTentacles.exe`**. Para mantener la estructura documentada, genera la compilación en `Build/`.
+7. Ejecuta el `.exe` obtenido, confirma que comienza en `Intro` y completa una partida para verificar la build.
 
-## 7. Limitaciones y problemas conocidos
+Si se regenera la build dentro de la carpeta entregada, sustituye el conjunto completo de archivos generado por Unity, no únicamente el `.exe`.
 
-- **Plataforma de entrega:** el ejecutable incluido es para **Windows x86_64**. No se proporciona una build de macOS, Linux o Web.
-- **Entrada prevista:** la experiencia se ha preparado principalmente para **teclado y ratón**. No se documenta compatibilidad verificada con mando, aunque el asset de acciones contenga bindings adicionales.
-- **Escena inicial:** ejecutar `Casa` directamente desde el Editor **omite el vídeo** de `Intro`.
-- **Reinicio:** la opción de reinicio recarga la **escena activa (`Casa`)**; no vuelve a reproducir la introducción.
-- **Acciones no utilizadas:** saltar, esprintar y agacharse están definidas en el asset de entrada, pero no tienen comportamiento en el controlador actual.
+## 7. Limitaciones y solución de problemas
 
-### Solución rápida de incidencias
+**Limitaciones conocidas de la entrega:**
 
-- **Faltan paquetes o aparecen errores al abrir:** verifica la versión `6000.6.3f1`, la conexión necesaria para resolver paquetes y la presencia de `Packages/manifest.json` y `Packages/packages-lock.json`.
-- **La build no abre o faltan archivos:** comprueba que has extraído **toda la carpeta** de la build, no solo el `.exe`.
-- **La compilación abre una escena incorrecta:** revisa el orden y la activación de escenas en **File → Build Profiles**.
+- La build suministrada está destinada a **Windows de 64 bits**; no se incluyen builds para macOS, Linux o navegador.
+- La experiencia está diseñada para **teclado y ratón**; no se declara compatibilidad con mando comprobada.
+- El inventario admite **un objeto a la vez**. La mecánica de soltar objetos es básica y no incorpora un sistema avanzado de colocación o físicas.
+- El reinicio desde el panel final recarga la escena activa (`Casa`), **sin volver a reproducir `Intro`**.
+- No hay menú de pausa general ni sistema de guardado de partidas.
 
-## 8. Índice de documentación
+**Si algo no funciona:**
 
-Los documentos complementarios se encuentran en [`Docs/`](Docs/):
+- **El proyecto da errores al importar:** verifica la versión de Unity y que estén presentes `Packages/manifest.json` y `Packages/packages-lock.json`. Permite que Package Manager termine de resolver las dependencias.
+- **La build no inicia:** conserva todos los archivos y subcarpetas de `Build/` junto al ejecutable.
+- **Se abre una escena incorrecta:** revisa la lista y el orden de escenas en **Build Profiles**.
+- **No puedes interactuar con algo:** apunta al objeto, acércate y utiliza **E**. Cierra previamente cualquier interfaz abierta con **Esc**.
 
-| Documento | Contenido |
-| --- | --- |
-| [Mini preproducción](Docs/MiniPreproduccion.docx) | Planteamiento y alcance inicial del prototipo |
-| [Mapa técnico](Docs/MapaTecnico.docx) | Arquitectura, componentes y relaciones entre sistemas |
-| [Guía para añadir contenido](Docs/GuiaAnadirContenido.docx) | Criterios y pasos de ampliación del proyecto |
-| [Diseño y validación](Docs/DisenoYvalidacion.docx) | Experiencia prevista, puzle y criterios de comprobación |
-| [Memoria de ejecución](Docs/MemoriaDeEjecucion.docx) | Seguimiento del trabajo, decisiones y resultados |
-| [Kanban inicial](Docs/KanbanVersionInicial.md) | Planificación inicial de tareas |
+Las pruebas del recorrido, los criterios de aceptación y los resultados del proceso se desarrollan en la documentación correspondiente. La build debe comprobarse de nuevo si se modifica el proyecto después de esta entrega.
+
+## 8. Documentación entregada
+
+La carpeta [`Docs/`](Docs/) contiene los siguientes archivos, con nombres y extensiones correspondientes a la entrega:
+
+### Diseño y documentación técnica
+
+- [Mini preproducción](Docs/MiniPreproduccion.pdf) — Alcance inicial, recorrido y planteamiento técnico.
+- [Mapa técnico](Docs/MapaTecnico.pdf) — Organización de carpetas, componentes, comunicación y estados.
+- [Guía para añadir contenido](Docs/GuiaAnadirContenido.pdf) — Pasos para crear interacciones, pistas, eventos y ampliar los puzles.
+- [Diseño y validación](Docs/DisenoYvalidacion.pdf) — Narrativa, puzle, tensión, final, pruebas manuales y recursos externos.
+
+### Planificación y ejecución
+
+- [Organización de tareas](Docs/OrganizacionTareas.pdf) — Uso del tablero, prioridades, estimaciones y seguimiento.
+- [Kanban inicial](Docs/KanbanVersionInicial.md) — Exportación de la planificación inicial.
+- [Kanban final](Docs/KanbanVersionFinal.md) — Exportación del estado final de las tareas.
+- [Memoria de ejecución](Docs/MemoriaDeEjecucion.pdf) — Trabajo por jornadas, decisiones, incidencias, pruebas, balance temporal y commits asociados a hitos.
+
+La documentación de recursos de terceros y sus condiciones de uso se recoge en **Diseño y validación**. Los paquetes de Unity se identifican en `Packages/manifest.json`.
 
 ---
 
-**Proyecto:** prueba técnica para Bowl of Tentacles · **Motor:** Unity `6000.6.3f1` · **Build incluida en el ZIP revisado:** Windows x86_64.
+**Repositorio:** https://github.com/Jositopk/PruebaTecnica_BowlOfTentacles  
+**Motor:** Unity `6000.6.3f1` · **Plataforma de la build:** Windows x86_64  
+**Versión de entrega:** `v1.0.0`.
